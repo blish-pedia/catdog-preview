@@ -728,6 +728,18 @@ function showResult() {
 
   show("view-result");
 }
+
+/* 预览用：?r=<id> 直接展示指定结果，方便对比图片比例 */
+(function(){
+  try{
+    var id = new URLSearchParams(location.search).get("r");
+    if(!id) return;
+    var t = RESULTS.find(function(x){ return x.id === id; });
+    if(!t) return;
+    computeResult = function(){ return { main: t.type, hit: t, score: 0 }; };
+    setTimeout(showResult, 60);
+  }catch(e){}
+})();
 </script>
 </body>
 </html>
