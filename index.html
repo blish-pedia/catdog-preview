@@ -62,10 +62,10 @@
   .back-btn:disabled{opacity:.35;cursor:not-allowed}
 
   /* 结果 */
-  .result-panel{background:var(--paper);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden;margin:24px auto}
+  .result-panel{background:var(--paper);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden;margin:24px auto;max-width:520px}
   .result-cover{position:relative;padding:14px;background:transparent;color:#fff}
-  .result-photo{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:cover;object-position:50% 36%;z-index:0}
-  .result-cover .cover-text{position:relative;z-index:2;min-height:240px;display:flex;flex-direction:column;justify-content:flex-end;border-radius:18px;overflow:hidden;padding:16px 18px;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.16)}
+  .result-photo{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:cover;object-position:50% 50%;z-index:0}
+  .result-cover .cover-text{position:relative;z-index:2;aspect-ratio:15/8;min-height:150px;display:flex;flex-direction:column;justify-content:flex-end;border-radius:18px;overflow:hidden;padding:16px 18px;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.16)}
   .result-cover .cover-text::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(20,14,9,0) 26%,rgba(20,14,9,.30) 56%,rgba(20,14,9,.78) 100%)}
   .result-cover .result-type,.result-cover .result-name,.result-cover .result-alias{position:relative;z-index:2}
   .result-cover::before{display:none}
@@ -107,7 +107,7 @@
     .result-name{font-size:23px}
     .result-cover{padding:10px}
     .result-photo{height:100%;aspect-ratio:auto}
-    .result-cover .cover-text{min-height:186px;padding:13px 15px;border-radius:15px}
+    .result-cover .cover-text{aspect-ratio:15/8;min-height:140px;padding:12px 14px;border-radius:14px}
     .result-body{padding:20px 18px}
     .fit-box{grid-template-columns:1fr}
     .quote-text{font-size:16px}
@@ -117,7 +117,7 @@
 .result-cover .result-name{text-shadow:0 1px 16px rgba(0,0,0,.55),0 1px 2px rgba(0,0,0,.35)}
 .result-cover .result-alias{text-shadow:0 1px 12px rgba(0,0,0,.55),0 1px 2px rgba(0,0,0,.30)}
 .result-cover .result-type{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-@media (min-width:700px){.result-cover .cover-text{min-height:280px}}
+@media (min-width:700px){.result-cover .cover-text{min-height:0}}
 </style>
 </head>
 <body>
