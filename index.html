@@ -202,42 +202,42 @@
 <script>
 /* ===== 品种图片映射（本地相对路径） ===== */
 const IMG_MAP = {
-  ragdoll: "assets/cat-ragdoll.webp",
-  bluewhite: "assets/cat-blue-white-bsh.webp",
-  siamese: "assets/cat-siamese.webp",
-  sphynx: "assets/cat-sphynx.webp",
-  samoyed: "assets/dog-samoyed.webp",
-  golden: "assets/dog-golden.webp",
-  labrador: "assets/dog-labrador.webp",
-  bichon: "assets/dog-bichon.webp",
-  poodle: "assets/dog-poodle.webp",
-  goldenshade: "assets/cat-golden-shaded.webp",
-  silvershade: "assets/cat-silver-shaded.webp",
-  lihua: "assets/cat-li-hua.webp",
-  chinchilla: "assets/cat-chinchilla.webp",
-  calico: "assets/cat-calico.webp",
-  blackcat: "assets/cat-black.webp",
-  shiba: "assets/dog-shiba.webp",
-  akita: "assets/dog-akita.webp",
-  schnauzer: "assets/dog-schnauzer.webp",
-  americansh: "assets/cat-american-sh.webp",
-  maine: "assets/cat-maine-coon.webp",
-  cowcat: "assets/cat-cow.webp",
-  bcollie: "assets/dog-border-collie.webp",
-  husky: "assets/dog-husky.webp",
-  corgi: "assets/dog-corgi.webp",
-  pom: "assets/dog-pomeranian.webp",
-  gshepherd: "assets/dog-german-shepherd.webp",
-  malamute: "assets/dog-malamute.webp",
-  blue: "assets/cat-blue-bsh.webp",
-  fold: "assets/cat-scottish-fold.webp",
-  exotic: "assets/cat-exotic-sh.webp",
-  persian: "assets/cat-persian.webp",
-  orange: "assets/cat-orange.webp",
-  frenchie: "assets/dog-french-bulldog.webp",
-  chow: "assets/dog-chow-chow.webp",
-  yorkie: "assets/dog-yorkie.webp",
-  native: "assets/dog-native.webp"
+  ragdoll: {s:"assets/cat-ragdoll.webp", x:50, y:40},
+  bluewhite: {s:"assets/cat-blue-white-bsh.webp", x:50, y:6},
+  siamese: {s:"assets/cat-siamese.webp", x:50, y:26},
+  sphynx: {s:"assets/cat-sphynx.webp", x:50, y:34},
+  samoyed: {s:"assets/dog-samoyed.webp", x:50, y:0},
+  golden: {s:"assets/dog-golden.webp", x:50, y:12},
+  labrador: {s:"assets/dog-labrador.webp", x:50, y:14},
+  bichon: {s:"assets/dog-bichon.webp", x:50, y:12},
+  poodle: {s:"assets/dog-poodle.webp", x:50, y:6},
+  goldenshade: {s:"assets/cat-golden-shaded.webp", x:50, y:12},
+  silvershade: {s:"assets/cat-silver-shaded.webp", x:50, y:31},
+  lihua: {s:"assets/cat-li-hua.webp", x:50, y:73},
+  chinchilla: {s:"assets/cat-chinchilla.webp", x:50, y:38},
+  calico: {s:"assets/cat-calico.webp", x:50, y:12},
+  blackcat: {s:"assets/cat-black.webp", x:50, y:14},
+  shiba: {s:"assets/dog-shiba.webp", x:50, y:29},
+  akita: {s:"assets/dog-akita.webp", x:50, y:47},
+  schnauzer: {s:"assets/dog-schnauzer.webp", x:50, y:10},
+  americansh: {s:"assets/cat-american-sh.webp", x:50, y:46},
+  maine: {s:"assets/cat-maine-coon.webp", x:50, y:18},
+  cowcat: {s:"assets/cat-cow.webp", x:50, y:66},
+  bcollie: {s:"assets/dog-border-collie.webp", x:50, y:63},
+  husky: {s:"assets/dog-husky.webp", x:50, y:66},
+  corgi: {s:"assets/dog-corgi.webp", x:50, y:42},
+  pom: {s:"assets/dog-pomeranian.webp", x:50, y:78},
+  gshepherd: {s:"assets/dog-german-shepherd.webp", x:50, y:53},
+  malamute: {s:"assets/dog-malamute.webp", x:50, y:12},
+  blue: {s:"assets/cat-blue-bsh.webp", x:50, y:75},
+  fold: {s:"assets/cat-scottish-fold.webp", x:50, y:47},
+  exotic: {s:"assets/cat-exotic-sh.webp", x:50, y:12},
+  persian: {s:"assets/cat-persian.webp", x:50, y:12},
+  orange: {s:"assets/cat-orange.webp", x:50, y:34},
+  frenchie: {s:"assets/dog-french-bulldog.webp", x:38, y:38},
+  chow: {s:"assets/dog-chow-chow.webp", x:50, y:14},
+  yorkie: {s:"assets/dog-yorkie.webp", x:50, y:43},
+  native: {s:"assets/dog-native.webp", x:50, y:29}
 };
 
 /* ===== 16 道题：每题四个选项对应 A / B / C / D ===== */
@@ -706,9 +706,10 @@ function showResult() {
   const { main, hit: r } = computeResult();
 
   const photo = document.getElementById("resultImg");
-  const imgSrc = IMG_MAP[r.id];
-  if (imgSrc) {
-    photo.src = imgSrc;
+  const pose = IMG_MAP[r.id];
+  if (pose) {
+    photo.src = pose.s;
+    photo.style.objectPosition = pose.x + "% " + pose.y + "%";
     photo.alt = r.name;
     photo.style.display = "block";
     photo.onerror = () => { photo.style.display = "none"; };

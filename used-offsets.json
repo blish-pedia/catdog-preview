@@ -1,0 +1,146 @@
+{
+ "cat-american-sh": {
+  "x": 50,
+  "y": 46
+ },
+ "cat-black": {
+  "x": 50,
+  "y": 14
+ },
+ "cat-blue-bsh": {
+  "x": 50,
+  "y": 75
+ },
+ "cat-blue-white-bsh": {
+  "x": 50,
+  "y": 6
+ },
+ "cat-calico": {
+  "x": 50,
+  "y": 12
+ },
+ "cat-chinchilla": {
+  "x": 50,
+  "y": 38
+ },
+ "cat-cow": {
+  "x": 50,
+  "y": 66
+ },
+ "cat-exotic-sh": {
+  "x": 50,
+  "y": 12
+ },
+ "cat-golden-shaded": {
+  "x": 50,
+  "y": 12
+ },
+ "cat-li-hua": {
+  "x": 50,
+  "y": 73
+ },
+ "cat-maine-coon": {
+  "x": 50,
+  "y": 18
+ },
+ "cat-orange": {
+  "x": 50,
+  "y": 34
+ },
+ "cat-persian": {
+  "x": 50,
+  "y": 12
+ },
+ "cat-ragdoll": {
+  "x": 50,
+  "y": 40
+ },
+ "cat-scottish-fold": {
+  "x": 50,
+  "y": 47
+ },
+ "cat-siamese": {
+  "x": 50,
+  "y": 26
+ },
+ "cat-silver-shaded": {
+  "x": 50,
+  "y": 31
+ },
+ "cat-sphynx": {
+  "x": 50,
+  "y": 34
+ },
+ "dog-akita": {
+  "x": 50,
+  "y": 47
+ },
+ "dog-bichon": {
+  "x": 50,
+  "y": 12
+ },
+ "dog-border-collie": {
+  "x": 50,
+  "y": 63
+ },
+ "dog-chow-chow": {
+  "x": 50,
+  "y": 14
+ },
+ "dog-corgi": {
+  "x": 50,
+  "y": 42
+ },
+ "dog-french-bulldog": {
+  "x": 38,
+  "y": 38
+ },
+ "dog-german-shepherd": {
+  "x": 50,
+  "y": 53
+ },
+ "dog-golden": {
+  "x": 50,
+  "y": 12
+ },
+ "dog-husky": {
+  "x": 50,
+  "y": 66
+ },
+ "dog-labrador": {
+  "x": 50,
+  "y": 14
+ },
+ "dog-malamute": {
+  "x": 50,
+  "y": 12
+ },
+ "dog-native": {
+  "x": 50,
+  "y": 29
+ },
+ "dog-pomeranian": {
+  "x": 50,
+  "y": 78
+ },
+ "dog-poodle": {
+  "x": 50,
+  "y": 6
+ },
+ "dog-samoyed": {
+  "x": 50,
+  "y": 0
+ },
+ "dog-schnauzer": {
+  "x": 50,
+  "y": 10
+ },
+ "dog-shiba": {
+  "x": 50,
+  "y": 29
+ },
+ "dog-yorkie": {
+  "x": 50,
+  "y": 43
+ }
+}
