@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>结果页图片方案对比</title>
+<style>
+  :root{--paper:#fffdfb;--line:#f0e3da;--shadow:0 10px 30px rgba(190,120,90,.12)}
+  *{box-sizing:border-box}
+  body{margin:0;padding:18px 14px 40px;background:#faf3ee;color:#332c29;
+    font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+  .label{font-size:12px;font-weight:700;letter-spacing:.06em;color:#c9694f;margin:22px 2px 8px}
+  .label span{font-weight:400;color:#9a8b84;letter-spacing:0}
+  .result-panel{background:var(--paper);border:1px solid var(--line);border-radius:20px;
+    box-shadow:var(--shadow);overflow:hidden;max-width:640px;margin:0 auto}
+
+  /* ========== A 现状：大图 + 玻璃面板 ========== */
+  .A .result-cover{position:relative;aspect-ratio:3/2;overflow:hidden;isolation:isolate}
+  .A .result-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%}
+  .A .result-cover::before{content:"";position:absolute;inset:0;z-index:1;
+    background:linear-gradient(180deg,rgba(24,16,9,.06) 0%,rgba(24,16,9,0) 42%,rgba(24,16,9,.20) 72%,rgba(24,16,9,.52) 100%)}
+  .A .cover-text{position:absolute;z-index:2;left:14px;right:14px;bottom:14px;padding:15px 17px;
+    border-radius:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.22);
+    backdrop-filter:blur(22px) saturate(165%);-webkit-backdrop-filter:blur(22px) saturate(165%);
+    color:#fff;box-shadow:0 8px 26px rgba(0,0,0,.18)}
+
+  /* ========== B / C / D：图片当卡片背景 ========== */
+  .cardimg{padding:14px}
+  .cardimg .cover-text{position:relative;overflow:hidden;border-radius:18px;
+    display:flex;flex-direction:column;justify-content:flex-end;padding:16px 18px;color:#fff}
+  .cardimg .result-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;z-index:0}
+  .cardimg .cover-text::after{content:"";position:absolute;inset:0;z-index:1;
+    background:linear-gradient(180deg,rgba(20,14,9,0) 26%,rgba(20,14,9,.30) 56%,rgba(20,14,9,.78) 100%)}
+  .cardimg .result-type,.cardimg .result-name,.cardimg .result-alias{position:relative;z-index:2}
+
+  .B .cover-text{min-height:240px}
+  .C .cover-text{min-height:186px}
+  .D .result-panel{max-width:440px}
+  .D .result-cover{position:relative;aspect-ratio:3/2;overflow:hidden}
+  .D .result-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .D .cover-text{position:absolute;left:12px;right:12px;bottom:12px;padding:13px 15px;border-radius:16px;
+    background:rgba(20,14,9,.32);border:1px solid rgba(255,255,255,.22);color:#fff;
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+
+  /* 文字样式与线上一致 */
+  .result-type{display:inline-block;font-size:11px;letter-spacing:.16em;color:#fff;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);
+    border-radius:999px;padding:4px 12px;margin-bottom:10px;align-self:flex-start}
+  .result-name{font-size:22px;font-weight:800;letter-spacing:.03em;margin:0 0 3px;
+    text-shadow:0 1px 14px rgba(0,0,0,.5)}
+  .result-alias{font-size:12.5px;margin:0;color:rgba(255,255,255,.92);text-shadow:0 1px 10px rgba(0,0,0,.5)}
+  .result-body{padding:16px 18px 20px;font-size:13px;color:#8f827c}
+</style>
+</head>
+<body>
+
+<div class="label">A · 现状 <span>大图铺满 3:2（427px 高）+ 毛玻璃面板</span></div>
+<div class="result-panel A">
+  <div class="result-cover">
+    <img class="result-photo" src="assets/cat-cow.webp" alt="">
+    <div class="cover-text">
+      <span class="result-type">小动物型</span>
+      <h2 class="result-name">奶牛猫</h2>
+      <p class="result-alias">黑白花 · 神经质的观察者</p>
+    </div>
+  </div>
+  <div class="result-body">深度解析 · 适合 / 不适合 …（正文区域）</div>
+</div>
+
+<div class="label">B · 图片当卡片背景 <span>卡片 240px 高，图片直接填满，无毛玻璃</span></div>
+<div class="result-panel cardimg B">
+  <div class="result-cover">
+    <div class="cover-text">
+      <img class="result-photo" src="assets/cat-cow.webp" alt="">
+      <span class="result-type">小动物型</span>
+      <h2 class="result-name">奶牛猫</h2>
+      <p class="result-alias">黑白花 · 神经质的观察者</p>
+    </div>
+  </div>
+  <div class="result-body">深度解析 · 适合 / 不适合 …（正文区域）</div>
+</div>
+
+<div class="label">C · 更矮的卡片 <span>卡片 186px 高，图片更扁</span></div>
+<div class="result-panel cardimg C">
+  <div class="result-cover">
+    <div class="cover-text">
+      <img class="result-photo" src="assets/cat-cow.webp" alt="">
+      <span class="result-type">小动物型</span>
+      <h2 class="result-name">奶牛猫</h2>
+      <p class="result-alias">黑白花 · 神经质的观察者</p>
+    </div>
+  </div>
+  <div class="result-body">深度解析 · 适合 / 不适合 …（正文区域）</div>
+</div>
+
+<div class="label">D · 整卡缩小 <span>面板最宽 440px，图片 3:2 不变，玻璃更透</span></div>
+<div class="result-panel D">
+  <div class="result-cover">
+    <img class="result-photo" src="assets/cat-cow.webp" alt="">
+    <div class="cover-text">
+      <span class="result-type">小动物型</span>
+      <h2 class="result-name">奶牛猫</h2>
+      <p class="result-alias">黑白花 · 神经质的观察者</p>
+    </div>
+  </div>
+  <div class="result-body">深度解析 · 适合 / 不适合 …（正文区域）</div>
+</div>
+
+</body>
+</html>
