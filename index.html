@@ -66,11 +66,11 @@
   .result-cover{position:relative;padding:14px;background:transparent;color:#fff}
   .result-photo{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:cover;object-position:50% 50%;z-index:0}
   .result-cover .cover-text{position:relative;z-index:2;aspect-ratio:15/8;min-height:150px;display:flex;flex-direction:column;justify-content:flex-end;border-radius:18px;overflow:hidden;padding:16px 18px;color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.16)}
-  .result-cover .cover-text::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(20,14,9,0) 26%,rgba(20,14,9,.30) 56%,rgba(20,14,9,.78) 100%)}
+  .result-cover .cover-text::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(20,14,9,0) 34%,rgba(20,14,9,.18) 62%,rgba(20,14,9,.60) 100%)}
   .result-cover .result-type,.result-cover .result-name,.result-cover .result-alias{position:relative;z-index:2}
   .result-cover::before{display:none}
   .result-cover::after{display:none}
-  .result-type{position:relative;display:inline-block;font-size:12px;letter-spacing:.16em;color:#fff;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:5px 14px;margin-bottom:14px}
+  .result-type{position:relative;display:inline-block;align-self:flex-start;width:auto;max-width:100%;font-size:12px;letter-spacing:.16em;color:#fff;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:5px 14px;margin-bottom:14px}
   .result-name{position:relative;font-size:29px;font-weight:800;letter-spacing:.03em;margin-bottom:4px}
   .result-alias{position:relative;font-size:13.5px;color:rgba(255,255,255,.88)}
   .result-body{padding:24px 26px 28px}
@@ -116,7 +116,7 @@
 /* 低透明度下的可读性补偿 */
 .result-cover .result-name{text-shadow:0 1px 16px rgba(0,0,0,.55),0 1px 2px rgba(0,0,0,.35)}
 .result-cover .result-alias{text-shadow:0 1px 12px rgba(0,0,0,.55),0 1px 2px rgba(0,0,0,.30)}
-.result-cover .result-type{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.result-cover .result-type{align-self:flex-start;backdrop-filter:none;-webkit-backdrop-filter:none}
 @media (min-width:700px){.result-cover .cover-text{min-height:0}}
 </style>
 </head>
