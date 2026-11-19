@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>裁剪位置调整工具</title>
+<style>
+  :root{--ink:#2b2521;--muted:#8b7f78;--line:#ecdfd6;--accent:#ff7a6b;--paper:#fffdfb}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#faf5f1;color:var(--ink)}
+  header{padding:18px 22px 12px;border-bottom:1px solid var(--line);background:var(--paper);position:sticky;top:0;z-index:10}
+  h1{margin:0 0 6px;font-size:18px}
+  .sub{font-size:12.5px;color:var(--muted);line-height:1.65}
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+  button{font:inherit;font-size:13px;padding:7px 13px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+  button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  #count{font-size:12.5px;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;padding:18px 22px 70px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:13px;overflow:hidden;box-shadow:0 4px 14px rgba(180,140,110,.08)}
+  .card.changed{border-color:var(--accent);box-shadow:0 0 0 2px rgba(255,122,107,.18)}
+  .frame{position:relative;width:100%;aspect-ratio:15/8;overflow:hidden;background:#eee;cursor:grab;touch-action:none}
+  .frame:active{cursor:grabbing}
+  .frame img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block;user-select:none;pointer-events:none}
+  .meta{padding:8px 10px;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px}
+  .name{font-weight:600;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .val{color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .nudge{display:flex;gap:4px;padding:0 10px 10px}
+  .nudge button{padding:4px 0;flex:1;font-size:12px;line-height:1}
+  #out{position:fixed;inset:auto 0 0 0;transform:translateY(100%);transition:.25s;background:#2b2521;color:#fff;padding:15px 18px 18px;z-index:20;max-height:62vh;overflow:auto}
+  #out.show{transform:none}
+  #json{width:100%;height:180px;border-radius:10px;border:1px solid #4a3f38;background:#1e1916;color:#9fe6b4;font-family:ui-monospace,Consolas,monospace;font-size:11.5px;padding:10px;margin:10px 0;resize:vertical}
+  .hint{font-size:12.5px;color:#c9bcb3;line-height:1.7}
+</style>
+</head>
+<body>
+<header>
+  <h1>裁剪位置调整</h1>
+  <div class="sub">
+    预览框就是<b>最终卡片比例 15:8</b>，初值<b>就是线上正在用的位置</b>，所见即所得。<br>
+    在图上<b>按住拖动</b>调整（上下拖 = 画面上下移），或用方向键微调；调完点「导出配置」把 JSON 发我。
+  </div>
+  <div class="bar">
+    <button class="primary" onclick="exportJSON()">导出配置</button>
+    <button onclick="resetAll()">恢复线上位置</button>
+    <span id="count">已调整 0 张</span>
+  </div>
+</header>
+
+<div class="grid" id="grid"></div>
+
+<div id="out">
+  <div class="hint">把这段 JSON 整份发给助手即可（36 条，直接覆盖线上配置）。</div>
+  <textarea id="json" readonly></textarea>
+  <div class="bar">
+    <button class="primary" onclick="copyJSON()">复制</button>
+    <button onclick="downloadJSON()">下载 offsets.json</button>
+    <button onclick="document.getElementById('out').classList.remove('show')">关闭</button>
+  </div>
+</div>
+
+<script>
+const DIR = 'assets/';
+const FILES = {"ragdoll": "cat-ragdoll", "bluewhite": "cat-blue-white-bsh", "siamese": "cat-siamese", "sphynx": "cat-sphynx", "samoyed": "dog-samoyed", "golden": "dog-golden", "labrador": "dog-labrador", "bichon": "dog-bichon", "poodle": "dog-poodle", "goldenshade": "cat-golden-shaded", "silvershade": "cat-silver-shaded", "lihua": "cat-li-hua", "chinchilla": "cat-chinchilla", "calico": "cat-calico", "blackcat": "cat-black", "shiba": "dog-shiba", "akita": "dog-akita", "schnauzer": "dog-schnauzer", "americansh": "cat-american-sh", "maine": "cat-maine-coon", "cowcat": "cat-cow", "bcollie": "dog-border-collie", "husky": "dog-husky", "corgi": "dog-corgi", "pom": "dog-pomeranian", "gshepherd": "dog-german-shepherd", "malamute": "dog-malamute", "blue": "cat-blue-bsh", "fold": "cat-scottish-fold", "exotic": "cat-exotic-sh", "persian": "cat-persian", "orange": "cat-orange", "frenchie": "dog-french-bulldog", "chow": "dog-chow-chow", "yorkie": "dog-yorkie", "native": "dog-native"};
+const DEFAULTS = {"ragdoll": {"x": 50, "y": 40}, "bluewhite": {"x": 50, "y": 6}, "siamese": {"x": 50, "y": 26}, "sphynx": {"x": 50, "y": 34}, "samoyed": {"x": 50, "y": 0}, "golden": {"x": 50, "y": 12}, "labrador": {"x": 50, "y": 14}, "bichon": {"x": 50, "y": 12}, "poodle": {"x": 50, "y": 6}, "goldenshade": {"x": 50, "y": 12}, "silvershade": {"x": 50, "y": 31}, "lihua": {"x": 50, "y": 73}, "chinchilla": {"x": 50, "y": 38}, "calico": {"x": 50, "y": 12}, "blackcat": {"x": 50, "y": 14}, "shiba": {"x": 50, "y": 29}, "akita": {"x": 50, "y": 47}, "schnauzer": {"x": 50, "y": 10}, "americansh": {"x": 50, "y": 46}, "maine": {"x": 50, "y": 18}, "cowcat": {"x": 50, "y": 66}, "bcollie": {"x": 50, "y": 63}, "husky": {"x": 50, "y": 66}, "corgi": {"x": 50, "y": 42}, "pom": {"x": 50, "y": 78}, "gshepherd": {"x": 50, "y": 53}, "malamute": {"x": 50, "y": 12}, "blue": {"x": 50, "y": 75}, "fold": {"x": 50, "y": 47}, "exotic": {"x": 50, "y": 12}, "persian": {"x": 50, "y": 12}, "orange": {"x": 50, "y": 34}, "frenchie": {"x": 38, "y": 38}, "chow": {"x": 50, "y": 14}, "yorkie": {"x": 50, "y": 43}, "native": {"x": 50, "y": 29}};
+const ORDER = ["ragdoll", "bluewhite", "siamese", "sphynx", "samoyed", "golden", "labrador", "bichon", "poodle", "goldenshade", "silvershade", "lihua", "chinchilla", "calico", "blackcat", "shiba", "akita", "schnauzer", "americansh", "maine", "cowcat", "bcollie", "husky", "corgi", "pom", "gshepherd", "malamute", "blue", "fold", "exotic", "persian", "orange", "frenchie", "chow", "yorkie", "native"];
+
+const state = {};
+
+function effective(id){ return state[id] || DEFAULTS[id] || {x:50,y:50}; }
+function isChanged(id){
+  const d = DEFAULTS[id], s = state[id];
+  if (!d || !s) return false;
+  return Math.round(s.x) !== Math.round(d.x) || Math.round(s.y) !== Math.round(d.y);
+}
+
+function makeCard(id){
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.id = id;
+  card.innerHTML = `
+    <div class="frame">
+      <img src="${DIR}${FILES[id]}.webp" alt="${id}" loading="lazy" ondragstart="return false">
+    </div>
+    <div class="meta">
+      <span class="name">${FILES[id]}</span>
+      <span class="val"></span>
+    </div>
+    <div class="nudge">
+      <button data-d="0,-3">↑</button>
+      <button data-d="0,3">↓</button>
+      <button data-d="-3,0">←</button>
+      <button data-d="3,0">→</button>
+      <button data-reset="1">复位</button>
+    </div>`;
+
+  const img = card.querySelector('img');
+  const val = card.querySelector('.val');
+  const frame = card.querySelector('.frame');
+
+  function apply(){
+    const p = effective(id);
+    img.style.objectPosition = p.x + '% ' + p.y + '%';
+    val.textContent = `${Math.round(p.x)} / ${Math.round(p.y)}`;
+    card.classList.toggle('changed', isChanged(id));
+    updateCount();
+  }
+
+  let dragging = false, sx = 0, sy = 0, ox = 50, oy = 50;
+  frame.addEventListener('pointerdown', e => {
+    dragging = true; frame.setPointerCapture(e.pointerId);
+    sx = e.clientX; sy = e.clientY;
+    const p = effective(id);
+    ox = p.x; oy = p.y;
+    state[id] = {x: ox, y: oy}; apply();
+  });
+  frame.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const r = frame.getBoundingClientRect();
+    const nx = ox - (e.clientX - sx) / r.width * 100;
+    const ny = oy - (e.clientY - sy) / r.height * 100;
+    state[id] = {x: Math.max(0, Math.min(100, nx)), y: Math.max(0, Math.min(100, ny))};
+    apply();
+  });
+  const stop = () => { dragging = false; };
+  frame.addEventListener('pointerup', stop);
+  frame.addEventListener('pointercancel', stop);
+
+  card.querySelectorAll('.nudge button').forEach(b => {
+    b.addEventListener('click', () => {
+      if (b.dataset.reset){ delete state[id]; apply(); return; }
+      const [dx, dy] = b.dataset.d.split(',').map(Number);
+      const p = effective(id);
+      state[id] = {x: Math.max(0, Math.min(100, p.x + dx)), y: Math.max(0, Math.min(100, p.y + dy))};
+      apply();
+    });
+  });
+
+  apply();
+  return card;
+}
+
+function updateCount(){
+  document.getElementById('count').textContent = `已调整 ${ORDER.filter(isChanged).length} 张`;
+}
+
+function exportJSON(){
+  const payload = {};
+  for (const id of ORDER){
+    const p = effective(id);
+    payload[FILES[id]] = {x: Math.round(p.x), y: Math.round(p.y)};
+  }
+  document.getElementById('json').value = JSON.stringify(payload, null, 2);
+  document.getElementById('out').classList.add('show');
+  document.getElementById('json').select();
+}
+
+function copyJSON(){
+  const el = document.getElementById('json');
+  el.select();
+  document.execCommand('copy');
+  navigator.clipboard?.writeText(el.value).catch(()=>{});
+}
+
+function downloadJSON(){
+  const blob = new Blob([document.getElementById('json').value], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'crop-offsets.json';
+  a.click();
+}
+
+function resetAll(){
+  for (const k of Object.keys(state)) delete state[k];
+  document.querySelectorAll('.card').forEach(c => {
+    const id = c.dataset.id;
+    const p = DEFAULTS[id] || {x:50,y:50};
+    c.querySelector('img').style.objectPosition = p.x + '% ' + p.y + '%';
+    c.querySelector('.val').textContent = `${Math.round(p.x)} / ${Math.round(p.y)}`;
+    c.classList.remove('changed');
+  });
+  updateCount();
+}
+
+const grid = document.getElementById('grid');
+ORDER.forEach(id => grid.appendChild(makeCard(id)));
+updateCount();
+</script>
+</body>
+</html>
